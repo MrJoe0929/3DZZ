@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			@keyframes open{
+				0%{
+					transform: rotateX(-120deg);
+				}
+				40%{
+					transform: rotateX(30deg);
+				}
+				60%{
+					transform: rotateX(-20deg);
+				}
+				80%{
+					transform: rotateX(10deg);
+				}
+				100%{
+					transform: rotateX(0deg);
+				}
+			}
+			* {
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				perspective: 1000px;
+			}
+			#wrap {
+				width: 400px;
+				margin: 30px auto;
+				perspective: 800px;
+				position: relative;
+				text-align: center;
+				background: #eee;
+				transition: .5s;
+				transform-style: preserve-3d;
+			}
+			#wrap>div {
+				top: 50px;
+			}
+			#wrap h2{
+				position: relative;
+				z-index: 999;
+				background: red;
+				height: 45px;
+				line-height: 45px;
+				color: #fff;
+			}
+			#wrap div {
+				width: 400px;
+				transform-style: preserve-3d;
+				transform-origin: top;
+				height: 45px;
+				font-size: 18px;
+				line-height: 45px;
+				font-family: georgia;
+				border: 1px solid #fff; 
+				text-align: center;
+				position: absolute;
+				top: 45px;
+				left: -1px;
+				background: #ccc;
+				transform: rotateX(-120deg);
+				transition: .5s;
+			}
+			#wrap .open{
+				animation: open 2s;
+				transform: rotateX(0deg);
+				transition: 0.4s;
+			}
+			#wrap div span{
+				display: block;
+				transition: .5s;
+				background: #eee;
+				box-shadow: inset 0 0 30px 20px rgba(0, 0, 0, 1);
+				cursor: no-drop;
+			}
+			#wrap div span:hover{
+				background: #ccc;
+			}
+			#wrap .open>span {
+				box-shadow: inset 0 0 30px 10px rgba(0, 0, 0, 0);
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="wrap">
+			<h2>列表</h2>
+			<div>
+				<span style="">第一项</span>
+				<div>
+					<span>第二项</span>
+					<div>
+						<span>第三项</span>
+						<div>
+							<span>第四项</span>
+							<div>
+								<span>第五项</span>
+								<div>
+									<span>第六项</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="./jquery-1.7.1.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$(function(){
+			var time = null;
+			$('#wrap').hover(function(){
+				var w = $(this).offset().left + $(this).width() / 2;
+				$(this).on('mousemove', function(e){
+					if(e.pageX > w){
+						$(this).css('transform', 'rotateY(30deg)');
+					}else{
+						$(this).css('transform', 'rotateY(-30deg)')
+					}
+				})
+				var count = 0;
+				clearInterval(time);
+				time = setInterval(function(){
+					$('#wrap div').eq(count).addClass('open');
+					count ++;
+					if(count > $('#wrap div').length){
+						clearInterval(time);
+					}
+				}, 133)
+			}, function(){
+				var count = $('#wrap div').length - 1;
+				clearInterval(time);
+				$(this).css('transform', 'rotateY(0deg)')
+				time = setInterval(function(){
+					$('#wrap div').eq(count).removeClass('open');
+					count --;
+					if(count < 0){
+						clearInterval(time);
+					}
+				}, 100)
+			})
+		}) 
+	</script>
+</html>
